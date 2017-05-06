@@ -1,4 +1,5 @@
-#include "stdafx.h"
+#include "Snake.h"
+#include "Display.h"
 
 
 Snake::Snake()

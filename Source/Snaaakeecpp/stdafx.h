@@ -6,20 +6,8 @@
 #ifndef INCLUDED_STDAFX
 #define INCLUDED_STDAFX
 
+#ifdef WIN32
 #include "targetver.h"
-
-#include <windows.h>
-#include <stdio.h>
-#include <tchar.h>
-#include <iostream>
-
-#include "Input.h"
-#include "Path.h"
-#include "Snake.h"
-#include "Grid.h"
-#include "Display.h"
-#include "Game.h"
-
-
 #endif
 
+#endif

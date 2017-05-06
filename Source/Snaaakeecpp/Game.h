@@ -1,27 +1,43 @@
 #ifndef INCLUDED_GAMEBASE
 #define INCLUDED_GAMEBASE
 
-#include <time.h>
-#include <fstream>
-#include <string>
+#include "Grid.h"
 
 class GameBase
 {
-	//This value si the size of the time gap between snake movements.
-	int ARBITRARY_TIMER;
-	//Values which determine if the game is running, and if the arena has walls.
-	bool gameRunning, walls;
+public:
+	GameBase();
+
+	~GameBase();
+
+	//The main game loop, call this to run the game itself.
+	void GameLoop();
+
+private:
+	//This value dictates the game's tick frequency.
+	int timeDelayPerFrame;
+	//Store the time since the last frame was drawn
+	float timeSinceLastFrame;
+
+	//Store if the game is currently running
+	bool gameRunning;
+	//Store if the game was won
+	bool victory;
+
+	//true if the snake arena should wrap
+	bool walls;
+
 	//Stores the size of the grid
 	Coord gridSize;
 
-public:
-	GameBase();
-	//Initialises ARBITRARY_TIMER(int), walls(bool), and gridSize from the config file.
+	//Grid holding the snake and berries
+	Grid* theGrid;
+
+	//Initialises ARBITRARY_TIMER, walls, and gridSize from the config file.
 	void ReadConfigFile();
-	~GameBase();
-	//The main game loop, call this to run the game itself.
-	void GameLoop();
+
+	//Execute every tick, passing in the time since the previous tick.
+	void Tick(float deltaTime);
 };
 
 #endif
-

@@ -1,10 +1,11 @@
-#include "stdafx.h"
+#include "Grid.h"
+
+#include "Display.h"
 
 void Grid::DrawBerry()
 {
 	Display::ShowCharAtLocation("Q", berry + Coord(1, 1));
 }
-
 
 Grid::Grid(bool _Walls, Coord _GridSize)
 {
@@ -12,7 +13,7 @@ Grid::Grid(bool _Walls, Coord _GridSize)
 	berry = Coord(7, 3);
 	snake = new Snake();
 	walls = _Walls;
-	MoveBerry();	
+	MoveBerry();
 }
 
 Grid::~Grid()
@@ -26,7 +27,7 @@ void Grid::UpdateSnake(int input)
 	if (input != 0)
 	{
 		snake->UpdateDirection(input);
-	}	
+	}
 	else
 	{
 		snake->ResetLastInput();
@@ -34,16 +35,16 @@ void Grid::UpdateSnake(int input)
 }
 
 bool Grid::MoveSnake()
-{	
+{
 	//If the snake would collide with itself then don't move it and return false;
 	Coord targetLocation = snake->GetTargetLocation();
 	if (snake->CollidingWithSelf(targetLocation))
 	{
 		return false;
 	}
-	
+
 	//Move the snake and keep it within bounds BEFORE checking for berry collision, otherwise the berry collision could come up false and then the head get moved over the berry.
-	snake->Move();	
+	snake->Move();
 	if (!snake->KeepHeadWithinBounds(gridSize, walls))
 	{
 		snake->RemoveTail();
@@ -61,8 +62,8 @@ bool Grid::MoveSnake()
 		else
 		{
 			Display::HideCharAtLocation(snake->RemoveTail() + Coord(1, 1));
-		}		
-	}		
+		}
+	}
 	return true;
 }
 
@@ -72,15 +73,15 @@ bool Grid::MoveBerry()
 	Display::HideCharAtLocation(berry + Coord(1, 1));
 	//As long as the berry is on top of the snake move the berry to a random location.
 	while (collision)
-	{ 
+	{
 		collision = false;
 		int random1 = rand() % gridSize.x;
 		int random2 = rand() % gridSize.y;
 		berry = Coord(random1, random2);
-		
+
 		collision = snake->CollidingWithSelf(berry);
 	}
-		
+
 	return true;
 }
 
@@ -92,7 +93,6 @@ void Grid::DrawContent()
 
 void Grid::DrawOutline()
 {
-	//Draw the border.
 	for (int x = 0; x < gridSize.x + 1; x++)
 	{
 		Display::ShowCharAtLocation("#", Coord(x, 0));

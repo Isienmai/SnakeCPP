@@ -1,25 +1,31 @@
 #ifndef INCLUDED_PATH
 #define INCLUDED_PATH
 
-//The entirety of path.h and path.cpp are an implementation of a linked list of coordinates.
+//path.h and path.cpp are an implementation of a linked list of the Coord struct.
 
+//The coord struct simply stores a 2d coordinate
+//It also provides constructors, simple addition/subtraction, and boolean comparison operator definitions
 struct Coord
 {
 	int x, y;
+        
 	Coord() : x(0), y(0) {}
 	Coord(int _x, int _y) : x(_x), y(_y) {}
+	
 	Coord operator+ (const Coord &other) const;
 	Coord operator- (const Coord &other) const;
 	bool operator== (const Coord &other) const;
 	bool operator!= (const Coord &other) const;
 };
 
+//Defines a node of the linked list.
 struct PathNode
 {
-	Coord point;
-	PathNode *next;
-	PathNode() : next(nullptr), point(0, 0) {}
-	PathNode(Coord content, PathNode *top) : point(content), next(top) {}
+	Coord point;        
+	PathNode* next;
+        
+	PathNode() : point(0, 0), next(nullptr) {}
+	PathNode(Coord content, PathNode* top) : point(content), next(top) {}
 };
 
 class Path
@@ -32,7 +38,6 @@ public:
 
 	void AddLast(Coord toAdd);
 	void AddFirst(Coord toAdd);
-	//The function returns the last member of the list and removes said member from the list.
 	Coord CutLast();
 	void RemoveFirst();
 	bool IsEmpty();

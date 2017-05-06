@@ -4,8 +4,8 @@
 namespace Input
 {
 	//Returns an int based on what directional keys are currently held down.
-	int GetInput();
+	int GetInputNonBlocking();
+	int GetInputBlocking();
 }
 
 #endif
-

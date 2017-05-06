@@ -1,9 +1,23 @@
-#include "stdafx.h"
+#include "Game.h"
 
+#include <fstream>
+#include <string>
+#include <time.h>
+#include "Input.h"
+#include "Display.h"
 
 GameBase::GameBase()
-{			
+{
 	ReadConfigFile();
+
+	theGrid = new Grid(walls, gridSize);
+	victory = false;
+	gameRunning = true;
+}
+
+GameBase::~GameBase()
+{
+    delete(theGrid);
 }
 
 void GameBase::ReadConfigFile()
@@ -12,10 +26,12 @@ void GameBase::ReadConfigFile()
 	std::ifstream readStream("config.txt");
 	int gridX = 20, gridY = 20;
 
-	//Move through the file by dumping text into infoDump, them put the value into ARBITRARY_TIMER(int).
+        //TODO: Replace with actual text parsing
+
+	//Move through the file by dumping text into infoDump, them put the value into timeDelayPerFrame.
 	readStream >> infoDump;
 	readStream >> infoDump;
-	readStream >> ARBITRARY_TIMER;
+	readStream >> timeDelayPerFrame;
 
 	//Move through the file by dumping text into infoDump, them put the value into walls(bool).
 	readStream >> infoDump;
@@ -31,17 +47,17 @@ void GameBase::ReadConfigFile()
 
 	readStream.close();
 
-	//If the ARBITRARY_TIMER(int) value is out of bounds (0-100) move it back into bounds.
+	//If the timeDelayPerFrame(int) value is out of bounds (0-100) move it back into bounds.
 	bool valueIncorrect = false;
-	if (ARBITRARY_TIMER > 100)
+	if (timeDelayPerFrame > 100)
 	{
 		valueIncorrect = true;
-		ARBITRARY_TIMER = 100;
+		timeDelayPerFrame = 100;
 	}
-	if (ARBITRARY_TIMER < 0)
+	if (timeDelayPerFrame < 0)
 	{
 		valueIncorrect = true;
-		ARBITRARY_TIMER = 0;
+		timeDelayPerFrame = 0;
 	}
 
 	//Prevent the board's width from being greater than that of the console window.
@@ -66,67 +82,79 @@ void GameBase::ReadConfigFile()
 		gridY = 10;
 	}
 
-	//If the ARBITRARY_TIMER(int) value was out of bounds, re-write the config file such that the contained value is within bounds.
+	//If any of the config values were out of bounds modify the text file to bring them back within bounds
 	if (valueIncorrect)
 	{
 		std::ofstream writeStream("config.txt");
-		writeStream << "Snake speed: " << ARBITRARY_TIMER << "\n";
+		writeStream << "Snake speed: " << timeDelayPerFrame << "\n";
 		writeStream << "Collide with walls: " << walls << "\n";
 		writeStream << "Grid Dimensions: " << gridX << " , " << gridY << "\n";
 		writeStream.close();
 	}
 
-	//Invert the ARBITRARY_TIMER(int) value, such that a high config speed results in a low maximum timer value.
-	ARBITRARY_TIMER = 100 - ARBITRARY_TIMER;
+	//Invert the timeDelayPerFrame value, such that a high config speed results in a low maximum timer value.
+	timeDelayPerFrame = 100 - timeDelayPerFrame;
 	gridSize = Coord(gridX, gridY);
-}
-
-GameBase::~GameBase()
-{	
 }
 
 void GameBase::GameLoop()
 {
-	//Clock is used to force the snake to move slow enough to control.
-	clock_t lastTime = clock();
+	theGrid->DrawOutline();
 
-	Grid theGrid = Grid(walls, gridSize);
-	bool victory = false;
-	theGrid.DrawOutline();
-	gameRunning = true;
+
+	//Clock is used to force the snake to move slow enough to control.
+  timespec *lastTime = new timespec();
+  timespec *currentTime = new timespec();
+
+	clock_gettime(CLOCK_MONOTONIC, lastTime);
 
 	//while the game is not over, run the game.
 	while (gameRunning)
 	{
-		//Update the snakes input/direction every tick for smooth controls.
-		theGrid.UpdateSnake(Input::GetInput());
-		//Only update the snake's movement and the screens display once every X milliseconds to keep the snake at a manageable speed.
-		if (clock() - lastTime > ARBITRARY_TIMER)
-		{
-			lastTime = clock();
-			//If the snakes motion results in a collision, gamerunning is set to false;
-			gameRunning = theGrid.MoveSnake();
-			if (gameRunning) theGrid.DrawContent();
-		}
-		
-		//If the snake completely fills the board then the player has won.
-		if (theGrid.Score() == (theGrid.GridSize().y * theGrid.GridSize().x))
-		{
-			victory = true;
-			gameRunning = false;
-		}
+		clock_gettime(CLOCK_MONOTONIC, currentTime);
+
+		Tick((currentTime->tv_nsec - lastTime->tv_nsec)/1000000.0f);
+		*lastTime = *currentTime;
 	}
 
-	//display victory or defeat+score message.
+	//display victory or defeat message.
 	if (victory)
 	{
-		Display::ShowCharAtLocation("-Victory!", Coord(1, theGrid.GridSize().y + 2));
+		Display::ShowCharAtLocation("-Victory!", Coord(1, theGrid->GetGridSize().y + 2));
 	}
 	else
 	{
-		Display::ShowCharAtLocation("-Defeat! Score:" + std::to_string(theGrid.Score()), Coord(1, theGrid.GridSize().y + 2));
-	}		
+		Display::ShowCharAtLocation("-Defeat! Score:" + std::to_string(theGrid->GetScore()), Coord(1, theGrid->GetGridSize().y + 2));
+	}
+
+	delete(lastTime);
+	delete(currentTime);
 
 	//Wait for user input before exiting.
-	std::cin.ignore();
+	Input::GetInputBlocking();
+}
+
+
+void GameBase::Tick(float deltaTime)
+{
+    timeSinceLastFrame += deltaTime;
+		if(timeSinceLastFrame < 0.0f) timeSinceLastFrame = 0.0f;
+
+    theGrid->UpdateSnake(Input::GetInputNonBlocking());
+
+    if (timeSinceLastFrame > (float)timeDelayPerFrame)
+    {
+            timeSinceLastFrame = 0.0f;
+
+            //If the snake cannot move the game ends
+            gameRunning = theGrid->MoveSnake();
+            theGrid->DrawContent();
+    }
+
+    //If the snake completely fills the board then the player has won.
+    if (theGrid->GetScore() == (theGrid->GetGridSize().y * theGrid->GetGridSize().x))
+    {
+            victory = true;
+            gameRunning = false;
+    }
 }
