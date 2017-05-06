@@ -8,15 +8,19 @@
 //Initialise and run the game
 int main(int argc, char* argv[])
 {
-	//Setup the console
-	//TODO: Replace with proper console setup
 	#ifdef __linux
-	std::system("clear");
+	//Save cursor position and switch to the alternate console
+	std::cout << "\0337\033[?47h\033[2J";
 	#endif
 
 	GameBase coreGame;
 
 	coreGame.GameLoop();
+
+	#ifdef __linux
+	//Clear alternat console, switch back to original console, restore cursor
+	std::cout << "\033[2J\033[?47l\0338";
+	#endif
 
 	return 0;
 }
