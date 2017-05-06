@@ -75,9 +75,9 @@ bool Grid::MoveBerry()
 	while (collision)
 	{
 		collision = false;
-		int random1 = rand() % gridSize.x;
-		int random2 = rand() % gridSize.y;
-		berry = Coord(random1, random2);
+		int random1 = rand() % (gridSize.x - 1);
+		int random2 = rand() % (gridSize.y - 1);
+		berry = Coord(random1 + 1, random2 + 1);
 
 		collision = snake->CollidingWithSelf(berry);
 	}

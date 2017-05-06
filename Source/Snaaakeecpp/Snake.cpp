@@ -109,7 +109,7 @@ bool Snake::KeepHeadWithinBounds(Coord bounds, bool walls)
 		if (walls) return false;
 		points.Start()->point.x -= bounds.x;
 	}
-	if (points.Start()->point.x < 0)
+	if (points.Start()->point.x < 1)
 	{
 		if (walls) return false;
 		points.Start()->point.x += bounds.x;
@@ -119,7 +119,7 @@ bool Snake::KeepHeadWithinBounds(Coord bounds, bool walls)
 		if (walls) return false;
 		points.Start()->point.y -= bounds.y;
 	}
-	if (points.Start()->point.y < 0)
+	if (points.Start()->point.y < 1)
 	{
 		if (walls) return false;
 		points.Start()->point.y += bounds.y;
