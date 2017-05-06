@@ -22,7 +22,7 @@ Snake::~Snake()
 
 void Snake::Move()
 {
-	AddSegment(Coord(points.Start()->point + currentDirection));	
+	AddSegment(Coord(points.Start()->point + currentDirection));
 }
 
 Coord Snake::GetTargetLocation()
@@ -45,7 +45,7 @@ void Snake::UpdateDirection(int input)
 		//Modify input(int) such that only NEW button presses are present.
 		input = ~lastInput & input;
 		//Set inputTransformation(Coord) to be the opposite of current direction so that if input is not one of the four directions nextDirection is not modified.
-		Coord inputTransformation = Coord(0, 0) - currentDirection;
+		Coord inputTransformation = nextDirection;
 
 		//Modify inputTransformation(coord) to be one of the four directional transformations based on the input direction.
 		switch (input)
@@ -71,7 +71,7 @@ void Snake::UpdateDirection(int input)
 
 		//Update lastInput(int).
 		lastInput = input;
-	}	
+	}
 }
 
 bool Snake::CollidingWithSelf(Coord newHead)
@@ -135,7 +135,7 @@ void Snake::AddSegment(Coord segment)
 }
 
 Coord Snake::RemoveTail()
-{	
+{
 	snakeLength--;
 	return points.CutLast();
 }
