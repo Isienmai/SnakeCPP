@@ -2,6 +2,8 @@
 
 #include <fstream>
 #include <string>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <time.h>
 #include "Input.h"
 #include "Display.h"
@@ -26,61 +28,72 @@ void GameBase::ReadConfigFile()
 	std::ifstream readStream("config.txt");
 	int gridX = 20, gridY = 20;
 
-        //TODO: Replace with actual text parsing
+  //TODO: Replace the following with text parsing
 
-	//Move through the file by dumping text into infoDump, them put the value into timeDelayPerFrame.
-	readStream >> infoDump;
-	readStream >> infoDump;
-	readStream >> timeDelayPerFrame;
-
-	//Move through the file by dumping text into infoDump, them put the value into walls(bool).
-	readStream >> infoDump;
-	readStream >> infoDump;
-	readStream >> infoDump;
-	readStream >> walls;
-
-	readStream >> infoDump;
-	readStream >> infoDump;
-	readStream >> gridX;
-	readStream >> infoDump;
-	readStream >> gridY;
-
-	readStream.close();
-
-	//If the timeDelayPerFrame(int) value is out of bounds (0-100) move it back into bounds.
+	//store if any of the config file values were out of bounds. Assume not by default.
 	bool valueIncorrect = false;
-	if (timeDelayPerFrame > 100)
+	if(readStream.is_open())
 	{
-		valueIncorrect = true;
-		timeDelayPerFrame = 100;
-	}
-	if (timeDelayPerFrame < 0)
-	{
-		valueIncorrect = true;
-		timeDelayPerFrame = 0;
-	}
+		//Move through the file by dumping text into infoDump, them put the value into timeDelayPerFrame.
+		readStream >> infoDump;
+		readStream >> infoDump;
+		readStream >> timeDelayPerFrame;
 
-	//Prevent the board's width from being greater than that of the console window.
-	if (gridX > 78)
-	{
-		valueIncorrect = true;
-		gridX = 78;
+		//Move through the file by dumping text into infoDump, them put the value into walls(bool).
+		readStream >> infoDump;
+		readStream >> infoDump;
+		readStream >> infoDump;
+		readStream >> walls;
+
+		readStream >> infoDump;
+		readStream >> infoDump;
+		readStream >> gridX;
+		readStream >> infoDump;
+		readStream >> gridY;
+
+		readStream.close();
+
+		//If the timeDelayPerFrame(int) value is out of bounds (0-100) move it back into bounds.
+		if (timeDelayPerFrame > 100)
+		{
+			valueIncorrect = true;
+			timeDelayPerFrame = 100;
+		}
+		if (timeDelayPerFrame < 0)
+		{
+			valueIncorrect = true;
+			timeDelayPerFrame = 0;
+		}
+
+		//Prevent the board's width from being greater than that of the console window.
+		if (gridX > 78)
+		{
+			valueIncorrect = true;
+			gridX = 78;
+		}
+		if (gridY > 50)
+		{
+			valueIncorrect = true;
+			gridY = 50;
+		}
+		if (gridX < 10)
+		{
+			valueIncorrect = true;
+			gridX = 10;
+		}
+		if (gridY < 10)
+		{
+			valueIncorrect = true;
+			gridY = 10;
+		}
 	}
-	if (gridY > 50)
+	#ifdef __linux
+	else
 	{
-		valueIncorrect = true;
-		gridY = 50;
+		creat("config.txt", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	}
-	if (gridX < 10)
-	{
-		valueIncorrect = true;
-		gridX = 10;
-	}
-	if (gridY < 10)
-	{
-		valueIncorrect = true;
-		gridY = 10;
-	}
+	#endif
+
 
 	//If any of the config values were out of bounds modify the text file to bring them back within bounds
 	if (valueIncorrect)
@@ -126,6 +139,8 @@ void GameBase::GameLoop()
 	{
 		Display::ShowCharAtLocation("-Defeat! Score:" + std::to_string(theGrid->GetScore()), Coord(1, theGrid->GetGridSize().y + 2));
 	}
+
+	Display::ShowCharAtLocation("Press any key and then hit ENTER to exit the game.", Coord(1, theGrid->GetGridSize().y + 3));
 
 	delete(lastTime);
 	delete(currentTime);
