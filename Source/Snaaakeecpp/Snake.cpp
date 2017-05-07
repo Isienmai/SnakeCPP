@@ -104,25 +104,31 @@ void Snake::Draw()
 
 bool Snake::KeepHeadWithinBounds(Coord bounds, bool walls)
 {
-	if (points.Start()->point.x > bounds.x - 1)
+	if(walls)
 	{
-		if (walls) return false;
-		points.Start()->point.x -= bounds.x;
+		if (points.Start()->point.x > bounds.x - 1)
+		{
+			return false;
+		}
+		if (points.Start()->point.y > bounds.y - 1)
+		{
+			return false;
+		}
+		if (points.Start()->point.x < 1)
+		{
+			return false;
+		}
+		if (points.Start()->point.y < 1)
+		{
+			return false;
+		}
 	}
-	if (points.Start()->point.x < 1)
+	else
 	{
-		if (walls) return false;
-		points.Start()->point.x += bounds.x;
-	}
-	if (points.Start()->point.y > bounds.y - 1)
-	{
-		if (walls) return false;
-		points.Start()->point.y -= bounds.y;
-	}
-	if (points.Start()->point.y < 1)
-	{
-		if (walls) return false;
-		points.Start()->point.y += bounds.y;
+		points.Start()->point.x = (points.Start()->point.x + (bounds.x - 2)) % (bounds.x - 1);
+		++(points.Start()->point.x);
+		points.Start()->point.y = (points.Start()->point.y + (bounds.y - 2)) % (bounds.y - 1);
+		++(points.Start()->point.y);
 	}
 
 	return true;
