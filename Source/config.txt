@@ -1,0 +1,3 @@
+Snake speed: 1
+Collide with walls: 1
+Grid Dimensions: 20 , 20

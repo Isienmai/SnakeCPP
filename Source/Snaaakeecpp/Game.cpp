@@ -116,8 +116,8 @@ void GameBase::GameLoop()
 
 
 	//Clock is used to force the snake to move slow enough to control.
-  timespec *lastTime = new timespec();
-  timespec *currentTime = new timespec();
+	timespec *lastTime = new timespec();
+	timespec *currentTime = new timespec();
 
 	clock_gettime(CLOCK_MONOTONIC, lastTime);
 
