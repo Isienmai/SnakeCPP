@@ -10,6 +10,10 @@
 
 GameBase::GameBase()
 {
+	//Setup default config values
+	timeDelayPerFrame = 10;
+	walls = 1;
+
 	ReadConfigFile();
 
 	theGrid = new Grid(walls, gridSize);
@@ -28,12 +32,14 @@ void GameBase::ReadConfigFile()
 	std::ifstream readStream("config.txt");
 	int gridX = 20, gridY = 20;
 
-  //TODO: Replace the following with text parsing
+	//TODO: Replace the following with text parsing
 
 	//store if any of the config file values were out of bounds. Assume not by default.
-	bool valueIncorrect = false;
+	bool valueIncorrect = true;
 	if(readStream.is_open())
 	{
+		valueIncorrect = false;
+
 		//Move through the file by dumping text into infoDump, them put the value into timeDelayPerFrame.
 		readStream >> infoDump;
 		readStream >> infoDump;
