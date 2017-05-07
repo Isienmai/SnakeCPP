@@ -47,7 +47,8 @@ bool Grid::MoveSnake()
 	snake->Move();
 	if (!snake->KeepHeadWithinBounds(gridSize, walls))
 	{
-		snake->RemoveTail();
+		//Remove the head and re-draw the wall that it may have overwritten
+		Display::ShowCharAtLocation("#", snake->RemoveHead() + Coord(1, 1));
 		return false;
 	}
 	else

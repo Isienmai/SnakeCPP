@@ -40,12 +40,12 @@ Path::~Path()
 {
 	while (start != nullptr)
 	{
-		RemoveFirst();
+		CutFirst();
 	}
 }
 
 void Path::AddLast(Coord toAdd)
-{		
+{
 	if (start != nullptr)
 	{
 		PathNode* temp = start;
@@ -92,14 +92,17 @@ Coord Path::CutLast()
 	return toReturn;
 }
 
-void Path::RemoveFirst()
+Coord Path::CutFirst()
 {
+	Coord toReturn;
 	if (start != nullptr)
 	{
+		toReturn = start->point;
 		PathNode* temp = start;
 		start = start->next;
 		delete temp;
 	}
+	return toReturn;
 }
 
 bool Path::IsEmpty()
@@ -133,6 +136,6 @@ bool Path::ContainsDuplicate()
 			toCheck = *nextToCheck;
 			nextToCheck = toCheck.next;
 		}
-	}	
+	}
 	return false;
 }

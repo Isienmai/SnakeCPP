@@ -139,3 +139,9 @@ Coord Snake::RemoveTail()
 	snakeLength--;
 	return points.CutLast();
 }
+
+Coord Snake::RemoveHead()
+{
+	snakeLength--;
+	return points.CutFirst();
+}
