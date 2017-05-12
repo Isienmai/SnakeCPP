@@ -1,3 +1,0 @@
-﻿  Game.cpp
-f:\documents\1-neworganise\programming\1--githubsource--1\snakecpp\source\snaaakeecpp\game.cpp(137): warning C4244: 'argument': conversion from 'clock_t' to 'float', possible loss of data
-  Snaaakeecpp.vcxproj -> F:\Documents\1-NewOrganise\Programming\1--GITHUBSOURCE--1\SnakeCPP\Source\Debug\Snaaakeecpp.exe

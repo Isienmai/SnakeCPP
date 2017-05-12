@@ -1,3 +1,0 @@
-Snake speed: 10
-Collide with walls: 0
-Grid Dimensions: 1 , 1
