@@ -1,11 +1,12 @@
 #ifndef INCLUDED_DISPLAY
 #define INCLUDED_DISPLAY
 
-#include <string>
 #include "Path.h"
 
 namespace Display
 {
+	void MoveCursorToLocation(Coord location);
+
 	//Displays a given character or string at a given coordinate within the console.
 	void ShowCharAtLocation(std::string symbol, Coord location);
 

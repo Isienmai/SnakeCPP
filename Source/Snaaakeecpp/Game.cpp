@@ -1,10 +1,5 @@
+#include "stdafx.h"
 #include "Game.h"
-
-#include <fstream>
-#include <string>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <time.h>
 #include "Input.h"
 #include "Display.h"
 
@@ -120,19 +115,32 @@ void GameBase::GameLoop()
 {
 	theGrid->DrawOutline();
 
+#ifdef WIN32
+	clock_t *lastTime = new clock_t();
+	clock_t *currentTime = new clock_t();
 
+	*lastTime = clock();
+#endif
+
+#ifdef __LINUX__
 	//Clock is used to force the snake to move slow enough to control.
 	timespec *lastTime = new timespec();
 	timespec *currentTime = new timespec();
 
 	clock_gettime(CLOCK_MONOTONIC, lastTime);
-
+#endif
 	//while the game is not over, run the game.
 	while (gameRunning)
 	{
-		clock_gettime(CLOCK_MONOTONIC, currentTime);
+#ifdef WIN32
+	*currentTime = clock();
+	Tick((*currentTime - *lastTime));
+#endif
 
+#ifdef __LINUX__
+		clock_gettime(CLOCK_MONOTONIC, currentTime);
 		Tick((currentTime->tv_nsec - lastTime->tv_nsec)/1000000.0f);
+#endif
 		*lastTime = *currentTime;
 	}
 

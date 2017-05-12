@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Path.h"
 
 Coord Coord::operator+ (const Coord &other) const

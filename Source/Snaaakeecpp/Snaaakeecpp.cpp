@@ -1,31 +1,26 @@
 // Snaaakeecpp.cpp : Defines the entry point for the console application.
 //
-
+#include "stdafx.h"
 #include "Game.h"
 #include "Display.h"
 
-#include <signal.h>
-#include <termios.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <iostream>
 
 //Switch to an alternate console and hide the cursor
 void InitialiseConsole()
 {
-	#ifdef __linux
+#ifdef __LINUX__
 	//Save cursor position and switch to the alternate console
 	std::cout << "\0337\033[?47h\033[2J";
 
 	//De-activate cursor
 	Display::SetCursorVisibility(false);
-	#endif
+#endif
 }
 
 //Switch back to the original console and re-enable the cursor
 void DestroyConsole()
 {
-	#ifdef __linux
+#ifdef __LINUX__
 	//Clear alternat console, switch back to original console, restore cursor
 	std::cout << "\033[2J\033[?47l\0338";
 
@@ -38,7 +33,7 @@ void DestroyConsole()
 
 	//Re-activate cursor
 	Display::SetCursorVisibility(true);
-	#endif
+#endif
 }
 
 void CtrlcHandler(int s)
@@ -50,6 +45,7 @@ void CtrlcHandler(int s)
 //Initialise and run the game
 int main(int argc, char* argv[])
 {
+#ifdef __LINUX__
 	//Setup the Ctrl C Handler
 	struct sigaction sigIntHandler;
 
@@ -60,7 +56,7 @@ int main(int argc, char* argv[])
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
 	InitialiseConsole();
-
+#endif
 	GameBase coreGame;
 
 	coreGame.GameLoop();

@@ -1,16 +1,12 @@
+#include "stdafx.h"
 #include "Input.h"
-
-#include <iostream>
-#include <termios.h>
-#include <unistd.h>
-#include <fcntl.h>
 
 int Input::GetInputNonBlocking()
 {
 	//If a given key is pressed then a unique bit of the returned integer is set.
 	int toReturn = 0b0000;
 
-#ifdef __linux
+#ifdef __LINUX__
 	//Store the olf and new termios structs
 	struct termios oldt, newt;
 	//store the old fcntl data
@@ -61,30 +57,33 @@ int Input::GetInputNonBlocking()
 	}
 #endif
 
-///	if (GetAsyncKeyState('W') || GetAsyncKeyState(VK_UP))
-///	{
-///		toReturn |= 0b0001;
-///	}
-///	if (GetAsyncKeyState('D') || GetAsyncKeyState(VK_RIGHT))
-///	{
-///		toReturn |= 0b0010;
-///	}
-///	if (GetAsyncKeyState('S') || GetAsyncKeyState(VK_DOWN))
-///	{
-///		toReturn |= 0b0100;
-///	}
-///	if (GetAsyncKeyState('A') || GetAsyncKeyState(VK_LEFT))
-///	{
-///		toReturn |= 0b1000;
-///	}
-
+#ifdef WIN32
+	if (GetAsyncKeyState('W') || GetAsyncKeyState(VK_UP))
+	{
+		toReturn |= 0b0001;
+	}
+	if (GetAsyncKeyState('D') || GetAsyncKeyState(VK_RIGHT))
+	{
+		toReturn |= 0b0010;
+	}
+	if (GetAsyncKeyState('S') || GetAsyncKeyState(VK_DOWN))
+	{
+		toReturn |= 0b0100;
+	}
+	if (GetAsyncKeyState('A') || GetAsyncKeyState(VK_LEFT))
+	{
+		toReturn |= 0b1000;
+	}
+#endif
 
 	return toReturn;
 }
 
 int Input::GetInputBlocking()
 {
+#ifdef __LINUX__
 	fcntl (0, F_SETFL, fcntl(0, F_GETFL, 0) & (~O_NONBLOCK));
+#endif
 	int toReturn;
 
 	std::cin >> toReturn;

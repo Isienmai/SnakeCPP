@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "Grid.h"
-
 #include "Display.h"
 
 void Grid::DrawBerry()
