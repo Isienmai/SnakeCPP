@@ -18,7 +18,7 @@ GameBase::GameBase()
 
 GameBase::~GameBase()
 {
-    delete(theGrid);
+	delete(theGrid);
 }
 
 void GameBase::ReadConfigFile()
@@ -166,24 +166,24 @@ void GameBase::GameLoop()
 
 void GameBase::Tick(float deltaTime)
 {
-    timeSinceLastFrame += deltaTime;
-		if(timeSinceLastFrame < 0.0f) timeSinceLastFrame = 0.0f;
+	timeSinceLastFrame += deltaTime;
+	if(timeSinceLastFrame < 0.0f) timeSinceLastFrame = 0.0f;
 
-    theGrid->UpdateSnake(Input::GetInputNonBlocking());
+	theGrid->UpdateSnake(Input::GetInputNonBlocking());
 
-    if (timeSinceLastFrame > (float)timeDelayPerFrame)
-    {
-            timeSinceLastFrame = 0.0f;
+	if (timeSinceLastFrame > (float)timeDelayPerFrame)
+	{
+			timeSinceLastFrame = 0.0f;
 
-            //If the snake cannot move the game ends
-            gameRunning = theGrid->MoveSnake();
-            theGrid->DrawContent();
-    }
+			//If the snake cannot move the game ends
+			gameRunning = theGrid->MoveSnake();
+			theGrid->DrawContent();
+	}
 
-    //If the snake completely fills the board then the player has won.
-    if (theGrid->GetScore() == (theGrid->GetGridSize().y * theGrid->GetGridSize().x))
-    {
-            victory = true;
-            gameRunning = false;
-    }
+	//If the snake completely fills the board then the player has won.
+	if(theGrid->GetScore() == (theGrid->GetGridSize().y * theGrid->GetGridSize().x))
+	{
+			victory = true;
+			gameRunning = false;
+	}
 }
