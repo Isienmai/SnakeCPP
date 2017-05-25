@@ -1,3 +1,3 @@
 Snake speed: 50
 Collide with walls: 0
-Grid Dimensions: 50 , 50
+Grid Dimensions: 64 , 36
