@@ -8,7 +8,7 @@
 //Switch to an alternate console and hide the cursor
 void InitialiseConsole()
 {
-#ifdef __LINUX__
+#ifdef __linux
 	//Save cursor position and switch to the alternate console
 	std::cout << "\0337\033[?47h\033[2J";
 
@@ -20,7 +20,7 @@ void InitialiseConsole()
 //Switch back to the original console and re-enable the cursor
 void DestroyConsole()
 {
-#ifdef __LINUX__
+#ifdef __linux
 	//Clear alternat console, switch back to original console, restore cursor
 	std::cout << "\033[2J\033[?47l\0338";
 
@@ -45,7 +45,7 @@ void CtrlcHandler(int s)
 //Initialise and run the game
 int main(int argc, char* argv[])
 {
-#ifdef __LINUX__
+#ifdef __linux
 	//Setup the Ctrl C Handler
 	struct sigaction sigIntHandler;
 

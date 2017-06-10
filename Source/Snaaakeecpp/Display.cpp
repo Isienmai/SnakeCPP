@@ -7,7 +7,7 @@ void Display::MoveCursorToLocation(Coord loca)
 #ifdef WIN32
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { (SHORT)loca.x, (SHORT)loca.y });
 #endif
-#ifdef __LINUX__
+#ifdef __linux
 	std::cout << "\033[" << loca.y << ";" << loca.x << "H";
 #endif
 }
@@ -33,7 +33,7 @@ void Display::SetCursorVisibility(bool visible)
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 #endif
 
-#ifdef __LINUX__
+#ifdef __linux
 	if(visible)
 	{
 		//Showcursor

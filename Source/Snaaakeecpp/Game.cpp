@@ -122,7 +122,7 @@ void GameBase::GameLoop()
 	*lastTime = clock();
 #endif
 
-#ifdef __LINUX__
+#ifdef __linux
 	//Clock is used to force the snake to move slow enough to control.
 	timespec *lastTime = new timespec();
 	timespec *currentTime = new timespec();
@@ -133,11 +133,11 @@ void GameBase::GameLoop()
 	while (gameRunning)
 	{
 #ifdef WIN32
-	*currentTime = clock();
-	Tick((*currentTime - *lastTime));
+        *currentTime = clock();
+        Tick((*currentTime - *lastTime));
 #endif
 
-#ifdef __LINUX__
+#ifdef __linux
 		clock_gettime(CLOCK_MONOTONIC, currentTime);
 		Tick((currentTime->tv_nsec - lastTime->tv_nsec)/1000000.0f);
 #endif

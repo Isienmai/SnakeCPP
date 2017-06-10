@@ -6,7 +6,7 @@ int Input::GetInputNonBlocking()
 	//If a given key is pressed then a unique bit of the returned integer is set.
 	int toReturn = 0b0000;
 
-#ifdef __LINUX__
+#ifdef __linux
 	//Store the olf and new termios structs
 	struct termios oldt, newt;
 	//store the old fcntl data
@@ -81,7 +81,7 @@ int Input::GetInputNonBlocking()
 
 int Input::GetInputBlocking()
 {
-#ifdef __LINUX__
+#ifdef __linux
 	fcntl (0, F_SETFL, fcntl(0, F_GETFL, 0) & (~O_NONBLOCK));
 #endif
 	int toReturn;

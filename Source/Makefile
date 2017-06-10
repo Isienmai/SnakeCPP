@@ -4,3 +4,6 @@ SOURCEFILES = ./Snaaakeecpp/Snaaakeecpp.cpp ./Snaaakeecpp/Snake.cpp ./Snaaakeecp
 
 SNAAAKEE: $(SOURCEFILES)
 	$(CC) $(CFLAGS) $(SOURCEFILES) -o ./Snaaakee.o
+
+clean:
+	rm ./Snaaakee.o

@@ -19,7 +19,7 @@
 #include <windows.h> 
 #endif
 
-#ifdef __LINUX__
+#ifdef __linux
 #include <fcntl.h>
 #include <signal.h>
 #include <termios.h>
