@@ -12,6 +12,12 @@ void Display::MoveCursorToLocation(Coord loca)
 #endif
 }
 
+void Display::ShowCharAtLocation(char symb, Coord loca)
+{
+	Display::MoveCursorToLocation(loca);
+	std::cout << symb;
+}
+
 void Display::ShowCharAtLocation(std::string symb, Coord loca)
 {
 	Display::MoveCursorToLocation(loca);

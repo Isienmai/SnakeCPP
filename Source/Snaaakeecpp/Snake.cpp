@@ -101,6 +101,10 @@ void Snake::Draw()
 		Display::ShowCharAtLocation("O", temp->point + Coord(1, 1));
 		temp = temp->next;
 	}
+	
+	//write the coordinates of the snake's head
+	Display::ShowCharAtLocation((char)(points.Start()->point.x + 51), Coord(1, 20));
+	Display::ShowCharAtLocation((char)(points.Start()->point.y + 51), Coord(1, 21));
 }
 
 bool Snake::KeepHeadWithinBounds(Coord bounds, bool walls)
