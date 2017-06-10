@@ -88,12 +88,12 @@ void GameBase::ReadConfigFile()
 			gridY = 10;
 		}
 	}
-	#ifdef __linux
 	else
 	{
+		#ifdef __linux
 		creat("config.txt", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+		#endif
 	}
-	#endif
 
 
 	//If any of the config values were out of bounds modify the text file to bring them back within bounds
