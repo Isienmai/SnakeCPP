@@ -8,7 +8,7 @@ void Display::MoveCursorToLocation(Coord loca)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { (SHORT)loca.x, (SHORT)loca.y });
 #endif
 #ifdef __linux
-	std::cout << "\033[" << loca.y << ";" << loca.x << "H";
+	std::cout << "\033[" << loca.y + 1 << ";" << loca.x + 1 << "H";
 #endif
 }
 
